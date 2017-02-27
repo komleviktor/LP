@@ -1,0 +1,35 @@
+{
+  "name": "bigdata",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://komlevictor@bitbucket.org/komlevictor/bigdata.git"
+  },
+  "author": "Zubova",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/komlevictor/bigdata#readme",
+  "dependencies": {
+    "csv-linkedin-parser": "^1.0.1",
+    "elasticsearch": "^12.1.2",
+    "excel-parser": "^0.2.2",
+    "excel-to-json": "^1.0.0",
+    "excel2json": "^0.2.9",
+    "fs": "0.0.1-security",
+    "http": "0.0.0",
+    "jsonfile": "^2.4.0",
+    "node-excel-to-json": "0.0.3",
+    "parse-rss": "^1.0.3",
+    "url": "^0.11.0",
+    "weather-js": "^1.0.2",
+    "xls-to-json": "^0.4.0",
+    "xlsx": "^0.8.0",
+    "xml2js": "^0.4.17",
+    "xml2json": "^0.10.0",
+    "yql": "^1.0.2"
+  }
+}
