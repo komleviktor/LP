@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "nibble": "eslint-nibble workFile.js"
   },
   "repository": {
     "type": "git",
@@ -31,5 +32,11 @@
     "xml2js": "^0.4.17",
     "xml2json": "^0.10.0",
     "yql": "^1.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^3.18.0",
+    "eslint-config-google": "^0.7.1",
+    "jsonfile": "^2.4.0",
+    "xml2js": "^0.4.17"
   }
 }

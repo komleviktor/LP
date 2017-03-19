@@ -1,23 +1,21 @@
 var fs = require('fs');
-var xml2js = require('xml2js');
-var jsonfile = require('jsonfile')
-var parser = require('xml2json');
+// var xml2js = require('xml2js');
+var jsonfile = require('jsonfile');
+// var parser = require('xml2json');
 var elasticsearch = require('elasticsearch');
 var weather = require('weather-js');
 var YQL = require('yql');
-
-var excel = function () {
+function  excel()  {
   var query = new YQL('select * from weather.forecast where (location = 94089)');
 
-  query.exec(function(err, data) {
+  query.exec(function (err, data) {
     var location = data.query.results.channel.location;
-    //var condition = data.query.results.channel.item.condition;
-
-    console.log('The current weather in ' + location.city + ', ' + location.region + ' is ' );
+    // var condition = data.query.results.channel.item.condition;
+    console.log('The current weather in ' + location.city + ', ' + location.region + ' is ');
   });
 };
 
-var getFile = function () {
+/* var getFile = function () {
 
   var quer = 'абакан';
 
@@ -42,36 +40,36 @@ var getFile = function () {
       console.log(city);
   }
 };
-
-var getRus = function () {
+*/
+function getRus() {
   var reading = JSON.parse(fs.readFileSync('./jsonData/4.json'));
   console.log(reading);
 };
-var xmlToJson = function () {
+function xmlToJson() {
   var path = './xmlData/';
   var file = fs.readdirSync(path);
   var count = 0;
   for (var i = 0; i < file.length; i++) {
-    var read = fs.readFileSync(path+file[i]);
+    var read = fs.readFileSync(path + file[i]);
     var json = parser.toJson(read);
-    //console.log(json);
+    // console.log(json);
     count++;
-    fs.writeFileSync('./jsonData/' + count + '.json',json);
+    fs.writeFileSync('./jsonData/' + count + '.json', json);
   }
 };
 
-var parserToElastic = function () {
-  ar path = './jsonData/';
+function parserToElastic() {
+  var path = './jsonData/';
   var file = fs.readdirSync(path);
   var count = 0;
 
   var client = new elasticsearch.Client({
-    host:'localhost:9200',
-    log:'trace'
+    host: 'localhost:9200',
+    log: 'trace'
   });
 
-    var reading = JSON.parse(fs.readFileSync(path+file[0]));
-    var like;
+  var reading = JSON.parse(fs.readFileSync(path + file[0]));
+  var like;
   /*
   Worksheet[0] - январь
   Row 4 -начало записей по времени и дате
@@ -88,60 +86,60 @@ var parserToElastic = function () {
   Cell[10].Data.$t - горизонтальная видимость, км
   Cell[11].Data.$t - погодные явления
   */
-  //console.log(reading.Workbook.Worksheet[0].Table.Row[57].Cell); //cell[0] data
-
+  // console.log(reading.Workbook.Worksheet[0].Table.Row[57].Cell); //cell[0] data
 
   count = 0;
   var weather = 'ясно';
-  var city = 'не опознан'
+  var city = 'не опознан';
   for (var i = 0; i < 72; i++) {
-     reading = JSON.parse(fs.readFileSync(path+file[i]));
-     for (var j = 0; j < reading.Workbook.Worksheet.length; j++)  {
-       for (var x = 4; x < reading.Workbook.Worksheet[j].Table.Row.length; x++)  {
-         if (reading.Workbook.Worksheet[j].Table.Row[x].hasOwnProperty('Cell') == true) {
-           if (reading.Workbook.Worksheet[j].Table.Row[x].Cell[11] != null) {
-             if (reading.Workbook.Worksheet[j].Table.Row[x].Cell[11].hasOwnProperty('Data') == true) {
-               if (reading.Workbook.Worksheet[j].Table.Row[x].Cell[11].Data.hasOwnProperty('$t') == true) {
-                 weather = reading.Workbook.Worksheet[j].Table.Row[x].Cell[11].Data.$t;
-               }
-             }
-           }
-         };
-         if (reading.Workbook.Worksheet[j].Table.Row[0].Cell.hasOwnProperty('Data') == true) {
-           if (reading.Workbook.Worksheet[j].Table.Row[0].Cell.Data.hasOwnProperty('$t') == true) {
-             city = JSON.parse(reading.Workbook.Worksheet[j].Table.Row[0].Cell.Data.$t.substring(reading.Workbook.Worksheet[j].Table.Row[0].Cell.Data.$t.indexOf('(')+14,reading.Workbook.Worksheet[j].Table.Row[0].Cell.Data.$t.indexOf(')')));
-           };}
-         count++;
-         console.log(count)
-         client.index({
-          index:'zubo',
-          type:'user',
-          id:count,
-          body:{
-            city:city,
-            date:(reading.Workbook.Worksheet[j].Table.Row[x].Cell[0].Data.$t),
-            time:reading.Workbook.Worksheet[j].Table.Row[x].Cell[1].Data.$t,
-            temperature:reading.Workbook.Worksheet[j].Table.Row[x].Cell[2].Data.$t,
-            importance:reading.Workbook.Worksheet[j].Table.Row[x].Cell[3].Data.$t,
-            dew_point:reading.Workbook.Worksheet[j].Table.Row[x].Cell[4].Data.$t,
-            pressure:reading.Workbook.Worksheet[j].Table.Row[x].Cell[5].Data.$t,
-            direction_of_the_wind:reading.Workbook.Worksheet[j].Table.Row[x].Cell[6].Data.$t,
-            speed:reading.Workbook.Worksheet[j].Table.Row[x].Cell[7].Data.$t,
-            cloudiness:reading.Workbook.Worksheet[j].Table.Row[x].Cell[8].Data.$t,
-            the_lower_cloud:reading.Workbook.Worksheet[j].Table.Row[x].Cell[9].Data.$t,
-            visibility:reading.Workbook.Worksheet[j].Table.Row[x].Cell[10].Data.$t,
-            weather:weather
+    reading = JSON.parse(fs.readFileSync(path + file[i]));
+    for (var j = 0; j < reading.Workbook.Worksheet.length; j++)  {
+      for (var x = 4; x < reading.Workbook.Worksheet[j].Table.Row.length; x++)  {
+        if (reading.Workbook.Worksheet[j].Table.Row[x].hasOwnProperty('Cell') == true) {
+          if (reading.Workbook.Worksheet[j].Table.Row[x].Cell[11] != null) {
+            if (reading.Workbook.Worksheet[j].Table.Row[x].Cell[11].hasOwnProperty('Data') == true) {
+              if (reading.Workbook.Worksheet[j].Table.Row[x].Cell[11].Data.hasOwnProperty('$t') == true) {
+                weather = reading.Workbook.Worksheet[j].Table.Row[x].Cell[11].Data.$t;
+              }
+            }
+          }
+        };
+        if (reading.Workbook.Worksheet[j].Table.Row[0].Cell.hasOwnProperty('Data') == true) {
+          if (reading.Workbook.Worksheet[j].Table.Row[0].Cell.Data.hasOwnProperty('$t') == true) {
+            city = JSON.parse(reading.Workbook.Worksheet[j].Table.Row[0].Cell.Data.$t.substring(reading.Workbook.Worksheet[j].Table.Row[0].Cell.Data.$t.indexOf('(')  + 14, reading.Workbook.Worksheet[j].Table.Row[0].Cell.Data.$t.indexOf(')')));
+          };
         }
-      }, function(err,res) {
-        console.log(err);
-        console.log(res);
-      });
-       }
-     }
+        count++;
+        console.log(count);
+        client.index({
+          index: 'zubo',
+          type: 'user',
+          id: count,
+          body: {
+            city: city,
+            date: (reading.Workbook.Worksheet[j].Table.Row[x].Cell[0].Data.$t),
+            time: reading.Workbook.Worksheet[j].Table.Row[x].Cell[1].Data.$t,
+            temperature: reading.Workbook.Worksheet[j].Table.Row[x].Cell[2].Data.$t,
+            importance: reading.Workbook.Worksheet[j].Table.Row[x].Cell[3].Data.$t,
+            dew_point: reading.Workbook.Worksheet[j].Table.Row[x].Cell[4].Data.$t,
+            pressure: reading.Workbook.Worksheet[j].Table.Row[x].Cell[5].Data.$t,
+            direction_of_the_wind: reading.Workbook.Worksheet[j].Table.Row[x].Cell[6].Data.$t,
+            speed: reading.Workbook.Worksheet[j].Table.Row[x].Cell[7].Data.$t,
+            cloudiness: reading.Workbook.Worksheet[j].Table.Row[x].Cell[8].Data.$t,
+            the_lower_cloud: reading.Workbook.Worksheet[j].Table.Row[x].Cell[9].Data.$t,
+            visibility: reading.Workbook.Worksheet[j].Table.Row[x].Cell[10].Data.$t,
+            weather: weather
+          }
+        }, function (err, res) {
+          console.log(err);
+          console.log(res);
+        });
+      }
+    }
   };
 };
 
-var getWeather = function () {
+function getWeather() {
   var city = [
     'Сургут',
     'Краснодар',
@@ -258,15 +256,14 @@ var getWeather = function () {
     'Ачинск'
   ];
   var count = 0;
-  for (var j = 0; j < city.length ; j++) {
-    weather.find({search: city[j], degreeType: 'C'}, function(err, result) {
+  for (var j = 0; j < city.length; j++) {
+    weather.find({ search: city[j], degreeType: 'C' }, function (err, result) {
     //  console.log(result.length + ' ' + city[j]);
-      for (var i = 0; i < result.length;i++) {
+      for (var i = 0; i < result.length; i++) {
         count++;
-        fs.writeFileSync('./Data/'+count + '.json', JSON.stringify(result[i]));
+        fs.writeFileSync('./Data/' + count + '.json', JSON.stringify(result[i]));
       }
     });
   }
   console.log(city.length);
-
 };

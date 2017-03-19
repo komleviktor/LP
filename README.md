@@ -9,4 +9,4 @@
 
 Для статического анализа кода я буду ESLint :http://eslint.org/;
 
-Для динамического Анализа кода jalangi2 от Samsung: https://www.npmjs.com/package/jalangi2 or https://github.com/Samsung/jalangi2
+Для динамического Анализа кода jalangi2 от Samsung: https://www.npmjs.com/package/jalangi2 or https://github.com/Samsung/jalangi2;
